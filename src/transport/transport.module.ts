@@ -39,6 +39,9 @@ export class TransportModule implements OnApplicationBootstrap {
   startEmitting() {
     let msgNumber = 0;
 
+    // Uncomment this to circumvent NestJS and manually setup the subscription
+    // this.listen();
+
     // wait 3 secs, then start emitting every 8
     timer(3000, 8000)
       .pipe(
@@ -46,5 +49,12 @@ export class TransportModule implements OnApplicationBootstrap {
         tap(() => this.client.emit(EVENT_NAME, { messageNumber: msgNumber })),
       )
       .subscribe();
+  }
+
+  listen() {
+    this.client['subClient'].subscribe(EVENT_NAME);
+    this.client['subClient'].on('message', (channel, message) => {
+      console.log(`subClient received; channel=${channel}, message=${message}`);
+    });
   }
 }
