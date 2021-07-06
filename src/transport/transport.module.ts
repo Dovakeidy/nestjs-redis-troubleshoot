@@ -25,10 +25,7 @@ export const RedisProvider: Provider = {
     }),
 };
 
-@Module({
-  providers: [RedisProvider],
-  exports: [NEST_REDIS],
-})
+@Module({ providers: [RedisProvider] })
 export class TransportModule implements OnApplicationBootstrap {
   constructor(@Inject(NEST_REDIS) private client: ClientRedis) {}
 
