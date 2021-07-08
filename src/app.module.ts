@@ -1,4 +1,4 @@
-import { Module, OnApplicationBootstrap } from '@nestjs/common';
+import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { AppController } from './app.controller';
 
 @Module({
@@ -7,6 +7,6 @@ import { AppController } from './app.controller';
 })
 export class AppModule implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
-    return;
+    Logger.log('This is a log line', 'Log Context');
   }
 }
