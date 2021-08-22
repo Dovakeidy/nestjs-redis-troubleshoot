@@ -1,12 +1,23 @@
 import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { AppController } from './app.controller';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [],
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'REDIS_CLIENT',
+        transport: Transport.REDIS,
+        options: {
+          url: 'redis://localhost:6379',
+        },
+      },
+    ]),
+  ],
   controllers: [AppController],
 })
 export class AppModule implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
-    Logger.log('This is a log line', 'Log Context');
+    Logger.log('Application Bootstrap', 'AppModule');
   }
 }
