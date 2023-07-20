@@ -3,7 +3,7 @@ import {
   Get,
   Inject,
   Logger,
-  OnModuleInit,
+  Scope,
   UseInterceptors,
 } from '@nestjs/common';
 import { ClientRedis, EventPattern } from '@nestjs/microservices';
@@ -11,13 +11,11 @@ import { LoggingInterceptor } from './logging.interceptor';
 
 const eventPattern = 'event_pattern';
 
-@Controller()
-export class AppController implements OnModuleInit {
+@Controller({
+  scope: Scope.REQUEST
+})
+export class AppController {
   constructor(@Inject('REDIS_CLIENT') private redis: ClientRedis) {}
-
-  onModuleInit(): any {
-    this.redis.emit(eventPattern, 'NEW EVENT');
-  }
 
   @EventPattern(eventPattern)
   handler1(data) {
@@ -33,6 +31,8 @@ export class AppController implements OnModuleInit {
 
   @Get('ping')
   getPing() {
+    this.redis.emit(eventPattern, 'NEW EVENT');
+
     return 'pong';
   }
 }
